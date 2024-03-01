@@ -1,8 +1,10 @@
 package com.eurodyn.model.people;
 
+import com.eurodyn.model.media.Movie;
+import com.eurodyn.model.media.TvShow;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -11,7 +13,11 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @Entity
-@Table(name = "DIRECTOR")
-public class Director extends Person{
+public class Director extends Person {
 
+  @OneToMany(mappedBy = "director")
+  private List<Movie> movies;
+
+  @OneToMany(mappedBy = "director")
+  private List<TvShow> tvShows;
 }

@@ -2,10 +2,9 @@ package com.eurodyn.model.people;
 
 import com.eurodyn.model.Nomination;
 import com.eurodyn.model.media.Movie;
+import com.eurodyn.model.media.TvShow;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.ManyToMany;
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,10 +14,14 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @Entity
-@Table(name = "ACTOR")
-public class Actor extends Person{
+public class Actor extends Person {
 
+  @ManyToMany(mappedBy = "actors")
+  private List<Movie> movies;
 
-  @OneToMany(mappedBy = "actor")
+  @ManyToMany(mappedBy = "actors")
+  private List<TvShow> tvShows;
+
+  @ManyToMany(mappedBy = "actors")
   private List<Nomination> nominations;
 }
