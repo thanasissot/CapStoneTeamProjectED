@@ -3,8 +3,8 @@ package com.eurodyn.model.people;
 import com.eurodyn.model.Nomination;
 import com.eurodyn.model.media.Movie;
 import com.eurodyn.model.media.TvShow;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
+
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +22,7 @@ public class Actor extends Person {
   @ManyToMany(mappedBy = "actors")
   private List<TvShow> tvShows;
 
-  @ManyToMany(mappedBy = "actors")
+  @OneToMany(mappedBy = "actor")
   private List<Nomination> nominations;
+
 }
