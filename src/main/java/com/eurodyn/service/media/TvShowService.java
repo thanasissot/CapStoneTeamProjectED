@@ -1,4 +1,8 @@
 package com.eurodyn.service.media;
 
-public interface TvShowService {
+import com.eurodyn.model.media.TvShow;
+import com.eurodyn.service.GenericService;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TvShowService extends GenericService<TvShow, Long> {
 }
