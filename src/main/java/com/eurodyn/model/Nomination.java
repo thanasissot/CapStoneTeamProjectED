@@ -3,7 +3,6 @@ package com.eurodyn.model;
 import com.eurodyn.model.people.Actor;
 import jakarta.persistence.*;
 
-import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
