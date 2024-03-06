@@ -1,4 +1,7 @@
 package com.eurodyn.service.people;
 
-public interface ActorService {
+import com.eurodyn.model.people.Actor;
+import com.eurodyn.service.GenericService;
+
+public interface ActorService extends GenericService<Actor, Long> {
 }

@@ -1,4 +1,7 @@
 package com.eurodyn.service.people;
 
-public interface CrewMemberService {
+import com.eurodyn.model.people.CrewMember;
+import com.eurodyn.service.GenericService;
+
+public interface CrewMemberService extends GenericService<CrewMember, Long> {
 }
