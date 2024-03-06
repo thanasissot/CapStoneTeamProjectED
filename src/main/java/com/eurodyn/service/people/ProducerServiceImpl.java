@@ -1,13 +1,10 @@
 package com.eurodyn.service.people;
 
-import com.eurodyn.model.people.Director;
+
 import com.eurodyn.model.people.Producer;
-import com.eurodyn.repository.DirectorRepository;
 import com.eurodyn.repository.ProducerRepository;
-import com.eurodyn.service.GenericService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -57,4 +54,4 @@ public class ProducerServiceImpl implements ProducerService {
         return producer.get();
     }
     }
-}
+
