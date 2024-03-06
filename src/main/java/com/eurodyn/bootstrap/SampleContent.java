@@ -23,6 +23,8 @@ public class SampleContent implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        Actor actor1 = createActor("actor1", BigDecimal.valueOf(500), Person.SalaryType.PER_EPISODE, null, null, null);
+        Actor actor2 = createActor("actor2", BigDecimal.valueOf(20000), Person.SalaryType.PER_FULL_PROJECT, null, null, null);
 
     }
 
@@ -36,7 +38,7 @@ public class SampleContent implements CommandLineRunner {
         actor.setTvShows(tvShowList);
         actor.setNominations(nominationList);
 
-        return actor;
+        return actorService.create(actor);
     }
 
 }
