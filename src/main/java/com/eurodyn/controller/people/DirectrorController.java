@@ -1,9 +1,7 @@
 package com.eurodyn.controller.people;
 
 import com.eurodyn.model.people.Director;
-import com.eurodyn.model.people.Producer;
 import com.eurodyn.service.people.DirectorService;
-import com.eurodyn.service.people.ProducerService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
