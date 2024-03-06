@@ -3,11 +3,11 @@ package com.eurodyn.bootstrap;
 import com.eurodyn.model.Nomination;
 import com.eurodyn.model.media.Movie;
 import com.eurodyn.model.media.TvShow;
-import com.eurodyn.model.people.Actor;
-import com.eurodyn.model.people.CrewMember;
-import com.eurodyn.model.people.Person;
+import com.eurodyn.model.people.*;
 import com.eurodyn.service.people.ActorService;
 import com.eurodyn.service.people.CrewMemberService;
+import com.eurodyn.service.people.DirectorService;
+import com.eurodyn.service.people.ProducerService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -21,6 +21,8 @@ import java.util.List;
 public class SampleContent implements CommandLineRunner {
     private final ActorService actorService;
     private final CrewMemberService crewMemberService;
+    private final DirectorService directorService;
+    private final ProducerService producerService;
 
 
     @Override
@@ -54,6 +56,32 @@ public class SampleContent implements CommandLineRunner {
         crewMember.setTvShows(tvShowList);
 
         return crewMemberService.create(crewMember);
+    }
+
+    private Director createDirector(String name, BigDecimal salary, Person.SalaryType salaryType,
+                                 List<Movie> movieList, List<TvShow> tvShowList) {
+        Director director = new Director();
+        director.setName(name);
+        director.setType(salaryType);
+        director.setSalary(salary);
+        director.setMovies(movieList);
+        director.setTvShows(tvShowList);
+
+
+        return directorService.create(director);
+    }
+
+    private Producer createProducer(String name, BigDecimal salary, Person.SalaryType salaryType,
+                                    List<Movie> movieList, List<TvShow> tvShowList) {
+        Producer producer = new Producer();
+        producer.setName(name);
+        producer.setType(salaryType);
+        producer.setSalary(salary);
+        producer.setMovies(movieList);
+        producer.setTvShows(tvShowList);
+
+
+        return producerService.create(producer);
     }
 
     private List<Actor> createActorList() {
@@ -128,6 +156,81 @@ public class SampleContent implements CommandLineRunner {
         crewMembers.add(crewMember10);
 
         return crewMembers;
+    }
+
+
+    private List<Director> createDirectorList() {
+        List<Director> directors = new ArrayList<>();
+        Director director1 = createDirector("director1", BigDecimal.valueOf(600), Person.SalaryType.PER_EPISODE,
+                null, null);
+        Director director2 = createDirector("director2", BigDecimal.valueOf(20200), Person.SalaryType.PER_FULL_PROJECT,
+                null, null);
+        Director director3 = createDirector("director3", BigDecimal.valueOf(800), Person.SalaryType.PER_EPISODE,
+                null, null);
+        Director director4 = createDirector("director4", BigDecimal.valueOf(24000), Person.SalaryType.PER_FULL_PROJECT,
+                null, null);
+        Director director5 = createDirector("director5", BigDecimal.valueOf(988), Person.SalaryType.PER_EPISODE,
+                null, null);
+        Director director6 = createDirector("director6", BigDecimal.valueOf(20777), Person.SalaryType.PER_FULL_PROJECT,
+                null, null);
+        Director director7 = createDirector("director7", BigDecimal.valueOf(455), Person.SalaryType.PER_EPISODE,
+                null, null);
+        Director director8 = createDirector("director8", BigDecimal.valueOf(21345), Person.SalaryType.PER_FULL_PROJECT,
+                null, null);
+        Director director9 = createDirector("adirector9", BigDecimal.valueOf(900), Person.SalaryType.PER_EPISODE,
+                null, null);
+        Director director10 = createDirector("director10", BigDecimal.valueOf(20000), Person.SalaryType.PER_FULL_PROJECT,
+                null, null);
+
+        directors.add(director1);
+        directors.add(director2);
+        directors.add(director3);
+        directors.add(director4);
+        directors.add(director5);
+        directors.add(director6);
+        directors.add(director7);
+        directors.add(director8);
+        directors.add(director9);
+        directors.add(director10);
+
+        return directors;
+    }
+
+    private List<Producer> createProducerList() {
+        List<Producer> producers = new ArrayList<>();
+        Producer producer1 = createProducer("producer1", BigDecimal.valueOf(300), Person.SalaryType.PER_EPISODE,
+                null, null);
+        Producer producer2 = createProducer("producer2", BigDecimal.valueOf(90000), Person.SalaryType.PER_FULL_PROJECT,
+                null, null);
+        Producer producer3 = createProducer("producer3", BigDecimal.valueOf(300), Person.SalaryType.PER_EPISODE,
+                null, null);
+        Producer producer4 = createProducer("producer4", BigDecimal.valueOf(23000), Person.SalaryType.PER_FULL_PROJECT,
+                null, null);
+        Producer producer5 = createProducer("producer5", BigDecimal.valueOf(455), Person.SalaryType.PER_EPISODE,
+                null, null);
+        Producer producer6 = createProducer("producer6", BigDecimal.valueOf(21000), Person.SalaryType.PER_FULL_PROJECT,
+                null, null);
+        Producer producer7 = createProducer("producer7", BigDecimal.valueOf(900), Person.SalaryType.PER_EPISODE,
+                null, null);
+        Producer producer8 = createProducer("producer8", BigDecimal.valueOf(21000), Person.SalaryType.PER_FULL_PROJECT,
+                null, null);
+        Producer producer9 = createProducer("producer9", BigDecimal.valueOf(700), Person.SalaryType.PER_EPISODE,
+                null, null);
+        Producer producer10 = createProducer("producer10", BigDecimal.valueOf(25000), Person.SalaryType.PER_FULL_PROJECT,
+                null, null);
+
+        producers.add(producer1);
+        producers.add(producer2);
+        producers.add(producer3);
+        producers.add(producer4);
+        producers.add(producer5);
+        producers.add(producer6);
+        producers.add(producer7);
+        producers.add(producer8);
+        producers.add(producer9);
+        producers.add(producer10);
+
+        return producers;
     }
 
 }
