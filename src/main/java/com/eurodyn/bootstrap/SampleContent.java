@@ -4,6 +4,8 @@ import com.eurodyn.model.Nomination;
 import com.eurodyn.model.media.Movie;
 import com.eurodyn.model.media.TvShow;
 import com.eurodyn.model.people.*;
+import com.eurodyn.service.media.MovieService;
+import com.eurodyn.service.media.TvShowService;
 import com.eurodyn.service.people.ActorService;
 import com.eurodyn.service.people.CrewMemberService;
 import com.eurodyn.service.people.DirectorService;
@@ -14,13 +16,17 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 @Component
 @AllArgsConstructor
 public class SampleContent implements CommandLineRunner {
     private final ActorService actorService;
+    private final MovieService movieService;
     private final CrewMemberService crewMemberService;
+    private final TvShowService tvShowService;
     private final DirectorService directorService;
     private final ProducerService producerService;
 
@@ -29,6 +35,10 @@ public class SampleContent implements CommandLineRunner {
     public void run(String... args) throws Exception {
         List<Actor> actors = createActorList();
         List<CrewMember> crewMembers = createCrewMembers();
+        List<Director> directors = createDirectorList();
+        List<Producer> producers = createProducerList();
+        List<Movie> movies = createMovieList(actors, directors, producers, crewMembers);
+        List<TvShow>tvShows = createTvShowList(actors,directors, producers, crewMembers);
 
 
     }
@@ -158,6 +168,96 @@ public class SampleContent implements CommandLineRunner {
         return crewMembers;
     }
 
+    private Movie createMovie(Director director, Integer productionBudget, Integer yearOfRelease, List<Actor> actorList, List<Producer> producerList, List<CrewMember> crewMemberList, String genre, String title) {
+        Movie movie = new Movie();
+        movie.setTitle(title);
+        movie.setGenre(genre);
+        movie.setDirector(director);
+        movie.setYearOfRelease(yearOfRelease);
+        movie.setProductionBudget(BigDecimal.valueOf(productionBudget));
+        movie.setActors(actorList);
+        movie.setCrewMembers(crewMemberList);
+        movie.setProducers(producerList);
+
+        return movieService.create(movie);
+    }
+
+    private TvShow createTvShow(Director director, BigDecimal minBudget, BigDecimal maxBudget, Integer startingYear, Integer endingYear,
+                                Integer numberOfEpisodes, List<Actor> actorList, List<Producer> producerList, List<CrewMember> crewMemberList, String genre, String title) {
+        TvShow tvShow = new TvShow();
+        tvShow.setTitle(title);
+        tvShow.setGenre(genre);
+        tvShow.setDirector(director);
+        tvShow.setStartingYear(startingYear);
+        tvShow.setEndingYear(endingYear);
+        tvShow.setMinBudget(minBudget);
+        tvShow.setMaxBudget(maxBudget);
+        tvShow.setActors(actorList);
+        tvShow.setNumberOfEpisodes(numberOfEpisodes);
+        tvShow.setCrewMembers(crewMemberList);
+        tvShow.setProducers(producerList);
+
+        return tvShowService.create(tvShow);
+    }
+
+    private List<Movie> createMovieList(List<Actor> actors, List<Director> directors, List<Producer> producers, List<CrewMember> crewMembers){
+        List<Movie> movies = new ArrayList<>();
+        Movie movie1 = createMovie(directors.get(0),1000000000,2023,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers), "action", "Movie1");
+        Movie movie2 = createMovie(directors.get(1),250000000,2009,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers), "action", "Movie2");
+        Movie movie3 = createMovie(directors.get(2),1000000000,2023,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers), "action", "Movie3");
+        Movie movie4 = createMovie(directors.get(3),250000000,2009,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers), "action", "Movie4");
+        Movie movie5 = createMovie(directors.get(4),1000000000,2023,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers), "action", "Movie5");
+        Movie movie6 = createMovie(directors.get(5),250000000,2009,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers), "action", "Movie6");
+        Movie movie7 = createMovie(directors.get(6),1000000000,2023,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers), "action", "Movie7");
+        Movie movie8 = createMovie(directors.get(7),250000000,2009,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers), "action", "Movie8");
+        Movie movie9 = createMovie(directors.get(8),1000000000,2023,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers), "action", "Movie9");
+        Movie movie10 = createMovie(directors.get(9),250000000,2009,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers), "action", "Movie10");
+
+        movies.add(movie1);
+        movies.add(movie2);
+        movies.add(movie3);
+        movies.add(movie4);
+        movies.add(movie5);
+        movies.add(movie6);
+        movies.add(movie7);
+        movies.add(movie8);
+        movies.add(movie9);
+        movies.add(movie10);
+
+        return movies;
+
+    }
+
+
+
+    private List<TvShow> createTvShowList(List<Actor> actors, List<Director> directors, List<Producer> producers, List<CrewMember> crewMembers){
+        List<TvShow> tvShows = new ArrayList<>();
+        TvShow tvShow1 = createTvShow(directors.get(0),BigDecimal.valueOf(1200000000),BigDecimal.valueOf(300000000),2020,2023,50,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers),"action","Show1" );
+        TvShow tvShow2 = createTvShow(directors.get(1),BigDecimal.valueOf(1200000000),BigDecimal.valueOf(300000000),2021,2023,50,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers),"action","Show2" );
+        TvShow tvShow3 = createTvShow(directors.get(2),BigDecimal.valueOf(1200000000),BigDecimal.valueOf(300000000),2000,2001,50,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers),"action","Show3" );
+        TvShow tvShow4 = createTvShow(directors.get(3),BigDecimal.valueOf(1200000000),BigDecimal.valueOf(300000000),2020,2023,50,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers),"action","Show4" );
+        TvShow tvShow5 = createTvShow(directors.get(4),BigDecimal.valueOf(1200000000),BigDecimal.valueOf(300000000),2022,2023,50,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers),"action","Show5" );
+        TvShow tvShow6 = createTvShow(directors.get(5),BigDecimal.valueOf(1200000000),BigDecimal.valueOf(300000000),2020,2023,50,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers),"action","Show6" );
+        TvShow tvShow7 = createTvShow(directors.get(6),BigDecimal.valueOf(1200000000),BigDecimal.valueOf(300000000),2023,2024,50,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers),"action","Show7" );
+        TvShow tvShow8 = createTvShow(directors.get(7),BigDecimal.valueOf(1200000000),BigDecimal.valueOf(300000000),2020,2023,50,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers),"action","Show8" );
+        TvShow tvShow9 = createTvShow(directors.get(8),BigDecimal.valueOf(1200000000),BigDecimal.valueOf(300000000),2021,2022,50,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers),"action","Show9" );
+        TvShow tvShow10 = createTvShow(directors.get(9),BigDecimal.valueOf(1200000000),BigDecimal.valueOf(300000000),2009,2010,50,getRandomActors(actors),getRandomProducers(producers),getRandomCrewMembers(crewMembers),"action","Show10" );
+
+
+        tvShows.add(tvShow1);
+        tvShows.add(tvShow2);
+        tvShows.add(tvShow3);
+        tvShows.add(tvShow4);
+        tvShows.add(tvShow5);
+        tvShows.add(tvShow6);
+        tvShows.add(tvShow7);
+        tvShows.add(tvShow8);
+        tvShows.add(tvShow9);
+        tvShows.add(tvShow10);
+
+        return tvShows;
+
+    }
 
     private List<Director> createDirectorList() {
         List<Director> directors = new ArrayList<>();
@@ -232,5 +332,68 @@ public class SampleContent implements CommandLineRunner {
 
         return producers;
     }
+    public static List<Actor> getRandomActors(List<Actor> originalList) {
+        // Create a new list to store random objects
+        List<Actor> randomObjects = new ArrayList<>();
 
+        int originalSize = originalList.size();
+
+        Random random = new Random();
+
+        int numObjectsToSelect = random.nextInt(3) + 4;
+
+        // Select random objects from the original list
+        for (int i = 0; i < numObjectsToSelect; i++) {
+            // Generate a random index to select an object from the original list
+            int randomIndex = random.nextInt(originalSize);
+
+            // Add the randomly selected object to the new list
+            randomObjects.add(originalList.get(randomIndex));
+        }
+
+        return randomObjects;
+    }
+    public static List<Producer> getRandomProducers(List<Producer> originalList) {
+        // Create a new list to store random objects
+        List<Producer> randomObjects = new ArrayList<>();
+
+        int originalSize = originalList.size();
+
+        Random random = new Random();
+
+        int numObjectsToSelect = random.nextInt(3) + 4;
+
+        // Select random objects from the original list
+        for (int i = 0; i < numObjectsToSelect; i++) {
+            // Generate a random index to select an object from the original list
+            int randomIndex = random.nextInt(originalSize);
+
+            // Add the randomly selected object to the new list
+            randomObjects.add(originalList.get(randomIndex));
+        }
+
+        return randomObjects;
+    }
+
+    public static List<CrewMember> getRandomCrewMembers(List<CrewMember> originalList) {
+        // Create a new list to store random objects
+        List<CrewMember> randomObjects = new ArrayList<>();
+
+        int originalSize = originalList.size();
+
+        Random random = new Random();
+
+        int numObjectsToSelect = random.nextInt(3) + 4;
+
+        // Select random objects from the original list
+        for (int i = 0; i < numObjectsToSelect; i++) {
+            // Generate a random index to select an object from the original list
+            int randomIndex = random.nextInt(originalSize);
+
+            // Add the randomly selected object to the new list
+            randomObjects.add(originalList.get(randomIndex));
+        }
+
+        return randomObjects;
+    }
 }

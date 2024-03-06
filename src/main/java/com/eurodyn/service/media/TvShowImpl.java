@@ -1,8 +1,12 @@
 package com.eurodyn.service.media;
 
+import com.eurodyn.exception.MediaException;
 import com.eurodyn.model.media.Movie;
 import com.eurodyn.model.media.TvShow;
+import com.eurodyn.model.people.Actor;
+import com.eurodyn.model.people.Producer;
 import com.eurodyn.repository.TvShowRepository;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +49,24 @@ public class TvShowImpl implements TvShowService{
             tvShowRepository.delete(tvShow); // throws RuntimeException!!!
         }
         return tvShow;
+    }
+
+    @Override
+    public BigDecimal findCost(Long id) throws MediaException {
+        TvShow tvShow = read(id);
+        BigDecimal cost = BigDecimal.ZERO;
+
+        if (tvShow != null) {
+            for (Actor actor : tvShow.getActors()) {
+                cost = cost.add(
+                    actor.getSalary().multiply(BigDecimal.valueOf(tvShow.getNumberOfEpisodes())));
+            }
+            for (Producer producer : tvShow.getProducers()) {
+                cost = cost.add((BigDecimal.valueOf(140000)));
+            }
+        } else {
+            throw new MediaException("This TV Show does not exist");
+        }
+        return cost;
     }
 }
