@@ -7,8 +7,7 @@ import com.eurodyn.repository.NominationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -66,4 +65,21 @@ public class NominationServiceImpl implements NominationService {
         return nomination;
     }
 
+    public List<Actor> findByNominated(int x) {
+        List<Nomination> nominations = nominationRepository.findAllByNominated(Nomination.NominationType.NOMINATED);
+        Map<Actor, Integer> map = new HashMap<>();
+
+        for (Nomination nomination : nominations) {
+            map.put(nomination.getActor(), map.getOrDefault(nomination.getActor(), 0) + 1);
+        }
+
+        List<Actor> result = new ArrayList<>();
+        for(Actor actor : map.keySet()) {
+            if (map.get(actor) >= x) {
+                result.add(actor);
+            }
+        }
+
+        return result;
+    }
 }

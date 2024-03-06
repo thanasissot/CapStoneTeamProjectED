@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface NominationRepository extends JpaRepository<Nomination, Long> {
     List<Nomination> findAllByNominationYearAndGenre(Integer nominationYear, String genre);
+
+    List<Nomination> findAllByNominated(Nomination.NominationType nominationType);
+
 }
