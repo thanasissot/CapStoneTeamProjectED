@@ -1,5 +1,6 @@
 package com.eurodyn.controller.people;
 
+import com.eurodyn.dto.ResponseApi;
 import com.eurodyn.model.people.Producer;
 import com.eurodyn.service.people.ProducerService;
 import lombok.AllArgsConstructor;
@@ -20,24 +21,33 @@ public class ProducerController {
     }
 
     @GetMapping()
-    public List<Producer> readProducer() {
-        return producerService.read();
+    public ResponseApi<List<Producer>> readProducer() {
+        ResponseApi<List<Producer>> producer =  new ResponseApi<>();
+        producer.setData(producerService.read());
+
+        return producer;
     }
 
     @GetMapping("/{producerId}")
-    public Producer getProducer(@PathVariable long producerId) {
-        return producerService.read(producerId);
+    public ResponseApi<Producer>  getProducer(@PathVariable long producerId) {
+        ResponseApi<Producer> producer =  new ResponseApi<>();
+        producer.setData(producerService.read(producerId));
+        return producer;
     }
 
     @PutMapping("/{producerId}")
-    public Producer updateProducer(@PathVariable long producerId, @RequestBody Producer newProducer) {
-        return producerService.update(producerId, newProducer);
+    public ResponseApi<Producer> updateProducer(@PathVariable long producerId, @RequestBody Producer newProducer) {
+        ResponseApi<Producer> producer =  new ResponseApi<>();
+        producer.setData(producerService.update(producerId, newProducer));
+        return producer;
     }
 
-    //    boolean deleteCustomer(int customerId);
+
     @DeleteMapping("/{producerId}")
-    public Producer deleteProducer(@PathVariable long producerId) {
-        return producerService.delete(producerId);
+    public ResponseApi<Producer> deleteProducer(@PathVariable long producerId) {
+        ResponseApi<Producer> producer =  new ResponseApi<>();
+        producer.setData(producerService.delete(producerId));
+        return producer;
     }
 
 
