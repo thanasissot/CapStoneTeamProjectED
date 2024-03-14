@@ -1,22 +1,18 @@
 package com.eurodyn.model.people;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import java.math.BigDecimal;
+import com.eurodyn.model.media.Media;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+
+import java.math.BigDecimal;
+import java.util.Set;
 
 @Data
+@Entity
 @NoArgsConstructor
-@MappedSuperclass
-@SuperBuilder
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "profession", discriminatorType = DiscriminatorType.STRING)
 public class Person {
 
   @Id
@@ -27,14 +23,24 @@ public class Person {
   @Column(length = 1024, nullable = false)
   private String name;
 
-  @Enumerated(EnumType.STRING)
-  private ProfessionType profession;
-
   @Column(precision = 10, scale = 2, nullable = false)
   private BigDecimal salary;
 
   @Enumerated(EnumType.STRING)
   private SalaryType type;
+
+  @OneToMany(mappedBy = "director")
+  private Set<Media> mediaDirector;
+
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "crewMembers")
+  private Set<Media> mediaCrews;
+
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "producers")
+  private Set<Media> mediaProducers;
+
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "actors")
+  private Set<Media> mediaActors;
+
 
   public enum SalaryType {
     PER_EPISODE,

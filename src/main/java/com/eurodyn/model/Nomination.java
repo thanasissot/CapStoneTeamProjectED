@@ -2,7 +2,6 @@ package com.eurodyn.model;
 
 import com.eurodyn.model.people.Actor;
 import jakarta.persistence.*;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,8 +16,6 @@ public class Nomination {
 
   @Column(nullable = false)
   private Integer nominationYear;
-
-  private String genre;
 
   @ManyToOne
   private Actor actor;

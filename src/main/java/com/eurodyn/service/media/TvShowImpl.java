@@ -1,15 +1,14 @@
 package com.eurodyn.service.media;
 
 import com.eurodyn.exception.MediaException;
-import com.eurodyn.model.media.Movie;
 import com.eurodyn.model.media.TvShow;
 import com.eurodyn.model.people.Actor;
 import com.eurodyn.model.people.Producer;
 import com.eurodyn.repository.TvShowRepository;
-import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service

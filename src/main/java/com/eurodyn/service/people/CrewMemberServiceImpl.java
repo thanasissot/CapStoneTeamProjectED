@@ -1,14 +1,11 @@
 package com.eurodyn.service.people;
 
-import com.eurodyn.model.people.Actor;
 import com.eurodyn.model.people.CrewMember;
-import com.eurodyn.model.people.Person;
 import com.eurodyn.repository.CrewMemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -17,7 +14,6 @@ public class CrewMemberServiceImpl implements CrewMemberService {
 
     @Override
     public CrewMember create(CrewMember crewMember) {
-        crewMember.setProfession(Person.ProfessionType.CREWMEMBER);
         return crewMemberRepository.save(crewMember);
     }
 

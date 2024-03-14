@@ -5,12 +5,13 @@ import com.eurodyn.model.media.Movie;
 import com.eurodyn.model.people.Actor;
 import com.eurodyn.model.people.Producer;
 import com.eurodyn.repository.MovieRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor

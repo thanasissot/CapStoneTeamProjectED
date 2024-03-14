@@ -18,7 +18,6 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Actor create(Actor actor) {
-        actor.setProfession(Person.ProfessionType.ACTOR);
         return actorRepository.save(actor);
     }
 

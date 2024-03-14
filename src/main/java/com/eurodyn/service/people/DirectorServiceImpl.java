@@ -26,10 +26,7 @@ public class DirectorServiceImpl implements DirectorService{
     @Override
     public Director read(Long directorId) {
       Optional<Director> director = directorRepository.findById(directorId);
-      if(director.isEmpty()){
-          return null;
-      }
-        return director.get();
+        return director.orElse(null);
     }
 
     @Override
