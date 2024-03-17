@@ -20,7 +20,7 @@ public class UserRating {
 
     private Float rating;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nomination_id") // This is the foreign key column in UserRating table
     private Nomination nomination;
 }
