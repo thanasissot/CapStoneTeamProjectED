@@ -8,9 +8,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
-
-import static com.eurodyn.model.Nomination.NominationType.WON;
 
 @Service
 @AllArgsConstructor
@@ -25,29 +22,30 @@ public class NominationServiceImpl implements NominationService {
 
   @Override
   public Nomination create(Nomination nomination) {
-    List<Nomination> nominations = nominationRepository.findAllByNominationYear(
-        nomination.getNominationYear());
-
-    
-    boolean nominationExists = nominations.stream().anyMatch(
-        nomination1 -> Objects.equals(nomination1.getActor().getId(),
-            nomination.getActor().getId()));
-    if (nominationExists) {
-      // throw exception cannot create
-      throw new NominationException(
-          "Year and Genre combination already exists - cannot create/update Nomination.");
-    }
-
-    if (nomination.getNominationResult().equals(WON)
-        && nominations.stream().anyMatch(nomination2 -> nomination2.getNominationResult().equals(
-        WON))
-    ) {
-      // throw exception cannot create WON already exists
-      throw new NominationException(
-          "Year and Genre and WON combination already exists - cannot create/update Nomination.");
-    }
-
-    return nominationRepository.save(nomination);
+//    List<Nomination> nominations = nominationRepository.findAllByNominationYear(
+//        nomination.getNominationYear());
+//
+//
+//    boolean nominationExists = nominations.stream().anyMatch(
+//        nomination1 -> Objects.equals(nomination1.getActor().getId(),
+//            nomination.getActor().getId()));
+//    if (nominationExists) {
+//      // throw exception cannot create
+//      throw new NominationException(
+//          "Year and Genre combination already exists - cannot create/update Nomination.");
+//    }
+//
+//    if (nomination.getNominationResult().equals(WON)
+//        && nominations.stream().anyMatch(nomination2 -> nomination2.getNominationResult().equals(
+//        WON))
+//    ) {
+//      // throw exception cannot create WON already exists
+//      throw new NominationException(
+//          "Year and Genre and WON combination already exists - cannot create/update Nomination.");
+//    }
+//
+//    return nominationRepository.save(nomination);
+    return null;
   }
 
   @Override

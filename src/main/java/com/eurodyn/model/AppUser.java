@@ -15,8 +15,4 @@ public class AppUser {
 
     private String fullName;
 
-//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-//    List<UserRating> userRatings;
-
-
 }

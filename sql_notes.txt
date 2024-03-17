@@ -6,8 +6,9 @@ SELECT * FROM APPUSER ;
 SELECT * FROM USERRATING ;
 SELECT * FROM PERSON ;
 SELECT * FROM MOVIE ;
+SELECT * FROM NOMINATIONWON ;
 
 insert into appuser(fullname) values('new user2');
 insert into userrating (rating, nomination_id, user_id) values(8.2, 1, 2);
 
-insert into actor(actor_id, media_id) values (1, 1); (constraint successful)
+insert into actor(actor_id, media_id) values (1, 1);

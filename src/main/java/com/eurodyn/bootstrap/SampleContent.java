@@ -1,16 +1,10 @@
 package com.eurodyn.bootstrap;
 
-import com.eurodyn.model.Genre;
-import com.eurodyn.model.Nomination;
-import com.eurodyn.model.AppUser;
-import com.eurodyn.model.UserRating;
+import com.eurodyn.model.*;
 import com.eurodyn.model.media.Media;
 import com.eurodyn.model.media.Movie;
 import com.eurodyn.model.people.*;
-import com.eurodyn.repository.NominationRepository;
-import com.eurodyn.repository.PersonRepository;
-import com.eurodyn.repository.UserRatingRepository;
-import com.eurodyn.repository.UserRepository;
+import com.eurodyn.repository.*;
 import com.eurodyn.service.GenreService;
 import com.eurodyn.service.media.MovieService;
 import com.eurodyn.service.media.TvShowService;
@@ -37,6 +31,7 @@ public class SampleContent implements CommandLineRunner {
     private final GenreService genreService;
 
     private final NominationRepository nominationRepository;
+    private final NominationWonRepository nominationWonRepository;
     private final PersonRepository personRepository;
     private final UserRepository userRepository;
     private final UserRatingRepository userRatingRepository;
@@ -69,11 +64,20 @@ public class SampleContent implements CommandLineRunner {
         System.out.println();
 
         Nomination nomination = new Nomination();
-        nomination.setNominationYear(1980);
-        nomination.setGenre(genres.get(2));
         nomination.setMovie(new ArrayList<>(movies).get(1));
         nomination.setActor(actor1);
         nomination = nominationRepository.save(nomination);
+
+        Nomination nomination1 = new Nomination();
+        nomination1.setMovie(new ArrayList<>(movies).get(2));
+        nomination1.setActor(actors.getFirst());
+        nomination1 = nominationRepository.save(nomination1);
+
+        // same movie different actor nominated
+        Nomination nomination2 = new Nomination();
+        nomination2.setMovie(new ArrayList<>(movies).get(2));
+        nomination2.setActor(actors.get(1));
+        nomination2 = nominationRepository.save(nomination2);
 
         AppUser appUser = new AppUser();
         appUser.setFullName("new user1");
@@ -84,6 +88,25 @@ public class SampleContent implements CommandLineRunner {
         userRating.setNomination(nomination);
         userRating.setRating(9.5f);
         userRating = userRatingRepository.save(userRating);
+
+        NominationWon nominationWon = new NominationWon();
+        nominationWon.setNomination(nomination);
+        nominationWon.setGenre(nomination.getGenre());
+        nominationWon.setYearOfRelease(nomination.getNominationYear());
+        nominationWon = nominationWonRepository.save(nominationWon);
+
+        NominationWon nominationWon1 = new NominationWon();
+        nominationWon1.setNomination(nomination1);
+        nominationWon1.setGenre(nomination1.getGenre());
+        nominationWon1.setYearOfRelease(nomination1.getNominationYear());
+        nominationWon1 = nominationWonRepository.save(nominationWon1);
+
+        // DataIntegrityViolationException thrown as expected
+//        NominationWon nominationWon2 = new NominationWon();
+//        nominationWon2.setNomination(nomination2);
+//        nominationWon2.setGenre(nomination2.getGenre());
+//        nominationWon2.setYearOfRelease(nomination2.getNominationYear());
+//        nominationWon2 = nominationWonRepository.save(nominationWon2);
 
         System.out.println();
 
@@ -155,8 +178,11 @@ public class SampleContent implements CommandLineRunner {
         List<Actor> actors = new ArrayList<>();
         Actor actor1 = createActor("actor1", BigDecimal.valueOf(50000), Person.SalaryType.PER_FULL_PROJECT,
                 null, null);
+        Actor actor2 = createActor("actor2", BigDecimal.valueOf(4500), Person.SalaryType.PER_EPISODE,
+                null, null);
 
         actors.add(actor1);
+        actors.add(actor2);
 
         return actors;
     }
