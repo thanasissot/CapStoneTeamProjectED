@@ -1,9 +1,8 @@
 package com.eurodyn.service.media;
 
 import com.eurodyn.exception.MediaException;
+import com.eurodyn.model.media.Media;
 import com.eurodyn.model.media.Movie;
-import com.eurodyn.model.people.Actor;
-import com.eurodyn.model.people.Producer;
 import com.eurodyn.repository.MovieRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @AllArgsConstructor
-public class MovieServiceImpl implements MovieService {
+public class MovieServiceImpl implements MovieService, FindCost {
 
   private final MovieRepository movieRepository;
 
@@ -55,24 +54,6 @@ public class MovieServiceImpl implements MovieService {
   }
 
   @Override
-  public BigDecimal findCost(Long id) throws MediaException {
-    Movie movie = read(id);
-    BigDecimal cost = BigDecimal.ZERO;
-
-    if (movie != null) {
-      for (Actor actor : movie.getActors()) {
-        cost = cost.add(actor.getSalary().multiply(BigDecimal.valueOf(20)));
-      }
-      for (Producer producer : movie.getProducers()) {
-        cost = cost.add((BigDecimal.valueOf(140000)));
-      }
-    }else{
-      throw new MediaException("This movie does not exist");
-    }
-    return cost;
-  }
-
-  @Override
   public List<Movie> getMoviesWithCertainNominations(Integer nominatedActors) throws MediaException {
     List<Movie> movies = this.movieRepository.findAll();
     List<Movie> nominatedMovies = new ArrayList<>();
@@ -97,4 +78,8 @@ public class MovieServiceImpl implements MovieService {
   }
 
 
+  @Override
+  public BigDecimal findCost(Media media) {
+    return FindCost.super.findCost(media);
+  }
 }

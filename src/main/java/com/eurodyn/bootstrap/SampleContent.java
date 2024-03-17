@@ -2,9 +2,15 @@ package com.eurodyn.bootstrap;
 
 import com.eurodyn.model.Genre;
 import com.eurodyn.model.Nomination;
+import com.eurodyn.model.AppUser;
+import com.eurodyn.model.UserRating;
 import com.eurodyn.model.media.Media;
 import com.eurodyn.model.media.Movie;
 import com.eurodyn.model.people.*;
+import com.eurodyn.repository.NominationRepository;
+import com.eurodyn.repository.PersonRepository;
+import com.eurodyn.repository.UserRatingRepository;
+import com.eurodyn.repository.UserRepository;
 import com.eurodyn.service.GenreService;
 import com.eurodyn.service.media.MovieService;
 import com.eurodyn.service.media.TvShowService;
@@ -30,6 +36,10 @@ public class SampleContent implements CommandLineRunner {
     private final ProducerService producerService;
     private final GenreService genreService;
 
+    private final NominationRepository nominationRepository;
+    private final PersonRepository personRepository;
+    private final UserRepository userRepository;
+    private final UserRatingRepository userRatingRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -48,7 +58,34 @@ public class SampleContent implements CommandLineRunner {
         Actor actor1 = createActor("actor11", BigDecimal.valueOf(500), Person.SalaryType.PER_EPISODE,
                 null, null);
         new ArrayList<>(movies).get(0).getActors().add(actor1);
-        movieService.create(new ArrayList<>(movies).get(0));
+        movieService.create(new ArrayList<>(movies).getFirst());
+
+        Set<Movie> movies1 = new HashSet<>(movieService.read());
+        Actor actor2 = actorService.read(1L);
+        actor2.getMediaActors();
+        System.out.println();
+
+        BigDecimal a = movieService.findCost((Media) new ArrayList<>(movies).getFirst());
+        System.out.println();
+
+        Nomination nomination = new Nomination();
+        nomination.setNominationYear(1980);
+        nomination.setGenre(genres.get(2));
+        nomination.setMovie(new ArrayList<>(movies).get(1));
+        nomination.setActor(actor1);
+        nomination = nominationRepository.save(nomination);
+
+        AppUser appUser = new AppUser();
+        appUser.setFullName("new user1");
+        appUser = userRepository.save(appUser);
+
+        UserRating userRating = new UserRating();
+        userRating.setAppUser(appUser);
+        userRating.setNomination(nomination);
+        userRating.setRating(9.5f);
+        userRating = userRatingRepository.save(userRating);
+
+        System.out.println();
 
     }
     public List<Genre> createGenres() {
@@ -116,7 +153,7 @@ public class SampleContent implements CommandLineRunner {
 
     private List<Actor> createActorList() {
         List<Actor> actors = new ArrayList<>();
-        Actor actor1 = createActor("actor1", BigDecimal.valueOf(500), Person.SalaryType.PER_EPISODE,
+        Actor actor1 = createActor("actor1", BigDecimal.valueOf(50000), Person.SalaryType.PER_FULL_PROJECT,
                 null, null);
 
         actors.add(actor1);

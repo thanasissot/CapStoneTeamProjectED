@@ -1,9 +1,7 @@
 package com.eurodyn.service.media;
 
-import com.eurodyn.exception.MediaException;
+import com.eurodyn.model.media.Media;
 import com.eurodyn.model.media.TvShow;
-import com.eurodyn.model.people.Actor;
-import com.eurodyn.model.people.Producer;
 import com.eurodyn.repository.TvShowRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class TvShowImpl implements TvShowService{
+public class TvShowServiceImpl implements TvShowService, FindCost {
     private TvShowRepository tvShowRepository;
     @Override
     public TvShow create(TvShow model) {
@@ -51,21 +49,7 @@ public class TvShowImpl implements TvShowService{
     }
 
     @Override
-    public BigDecimal findCost(Long id) throws MediaException {
-        TvShow tvShow = read(id);
-        BigDecimal cost = BigDecimal.ZERO;
-
-        if (tvShow != null) {
-            for (Actor actor : tvShow.getActors()) {
-                cost = cost.add(
-                    actor.getSalary().multiply(BigDecimal.valueOf(tvShow.getNumberOfEpisodes())));
-            }
-            for (Producer producer : tvShow.getProducers()) {
-                cost = cost.add((BigDecimal.valueOf(140000)));
-            }
-        } else {
-            throw new MediaException("This TV Show does not exist");
-        }
-        return cost;
+    public BigDecimal findCost(Media media) {
+        return FindCost.super.findCost(media);
     }
 }

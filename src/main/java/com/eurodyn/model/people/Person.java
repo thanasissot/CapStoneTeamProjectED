@@ -32,13 +32,13 @@ public class Person {
   @OneToMany(mappedBy = "director")
   private Set<Media> mediaDirector;
 
-  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "crewMembers")
+  @ManyToMany(fetch = FetchType.EAGER, mappedBy = "crewMembers")
   private Set<Media> mediaCrews;
 
-  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "producers")
+  @ManyToMany(fetch = FetchType.EAGER, mappedBy = "producers")
   private Set<Media> mediaProducers;
 
-  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "actors")
+  @ManyToMany(fetch = FetchType.EAGER, mappedBy = "actors")
   private Set<Media> mediaActors;
 
 

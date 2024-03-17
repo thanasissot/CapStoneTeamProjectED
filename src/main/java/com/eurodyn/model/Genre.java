@@ -1,8 +1,11 @@
 package com.eurodyn.model;
 
+import com.eurodyn.model.media.Movie;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Entity
 @Data
@@ -15,6 +18,9 @@ public class Genre {
 
     @Enumerated(EnumType.STRING)
     GenreName name;
+
+    @OneToMany(mappedBy = "genre")
+    private Set<Movie> movies;
 
     public enum GenreName {
         HORROR,
