@@ -2,50 +2,45 @@ package com.eurodyn.service;
 
 import com.eurodyn.exception.NominationException;
 import com.eurodyn.model.Nomination;
+import com.eurodyn.model.media.Movie;
 import com.eurodyn.model.people.Actor;
 import com.eurodyn.repository.NominationRepository;
+import com.eurodyn.repository.NominationWonRepository;
+import com.eurodyn.service.media.MovieService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
 public class NominationServiceImpl implements NominationService {
 
-  private final NominationRepository nominationRepository;
+    private final NominationRepository nominationRepository;
+    private final NominationWonRepository nominationWonRepository;
+    private final MovieService movieService;
 
-  // create and update should verify 2 things
-  // 1. there is no same actor for same year and genre of nomination
-  // 2. there is only 1 WON result for same year and genre
-  // 3. we are making th year/genre/actor but only logically not defined in schema
+    // create and update should verify that
+    // actor nominated is an actor that played in the movie
+    @Override
+	public Nomination create(Nomination nomination) {
+        Movie movie = nomination.getMovie();
+		Movie movieFromDB = movieService.read(movie.getId());
+        if (movieFromDB == null) {
+            throw new NominationException("Movie does not exist.");
+        }
+        else {
+            boolean actorInMovie = movieFromDB.getActors().stream().anyMatch(
+                    actor -> Objects.equals(actor.getId(), nomination.getActor().getId())
+            );
 
-  @Override
-  public Nomination create(Nomination nomination) {
-//    List<Nomination> nominations = nominationRepository.findAllByNominationYear(
-//        nomination.getNominationYear());
-//
-//
-//    boolean nominationExists = nominations.stream().anyMatch(
-//        nomination1 -> Objects.equals(nomination1.getActor().getId(),
-//            nomination.getActor().getId()));
-//    if (nominationExists) {
-//      // throw exception cannot create
-//      throw new NominationException(
-//          "Year and Genre combination already exists - cannot create/update Nomination.");
-//    }
-//
-//    if (nomination.getNominationResult().equals(WON)
-//        && nominations.stream().anyMatch(nomination2 -> nomination2.getNominationResult().equals(
-//        WON))
-//    ) {
-//      // throw exception cannot create WON already exists
-//      throw new NominationException(
-//          "Year and Genre and WON combination already exists - cannot create/update Nomination.");
-//    }
-//
-//    return nominationRepository.save(nomination);
-    return null;
+            if (!actorInMovie) {
+              throw new NominationException("Actor does not play in Movie provided.");
+            }
+        }
+
+        return nominationRepository.save(nomination);
   }
 
   @Override

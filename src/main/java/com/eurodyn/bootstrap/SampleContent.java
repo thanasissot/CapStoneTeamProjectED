@@ -1,11 +1,13 @@
 package com.eurodyn.bootstrap;
 
+import com.eurodyn.exception.NominationException;
 import com.eurodyn.model.*;
 import com.eurodyn.model.media.Media;
 import com.eurodyn.model.media.Movie;
 import com.eurodyn.model.people.*;
 import com.eurodyn.repository.*;
 import com.eurodyn.service.GenreService;
+import com.eurodyn.service.NominationService;
 import com.eurodyn.service.media.MovieService;
 import com.eurodyn.service.media.TvShowService;
 import com.eurodyn.service.people.ActorService;
@@ -13,13 +15,16 @@ import com.eurodyn.service.people.CrewMemberService;
 import com.eurodyn.service.people.DirectorService;
 import com.eurodyn.service.people.ProducerService;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 @Component
+@Log4j2
 @AllArgsConstructor
 public class SampleContent implements CommandLineRunner {
     private final ActorService actorService;
@@ -29,6 +34,7 @@ public class SampleContent implements CommandLineRunner {
     private final DirectorService directorService;
     private final ProducerService producerService;
     private final GenreService genreService;
+	private final NominationService nominationService;
 
     private final NominationRepository nominationRepository;
     private final NominationWonRepository nominationWonRepository;
@@ -37,6 +43,7 @@ public class SampleContent implements CommandLineRunner {
     private final UserRatingRepository userRatingRepository;
 
     @Override
+	@Transactional
     public void run(String... args) throws Exception {
         List<Genre> genres = createGenres();
         List<Actor> actors = createActorList();
@@ -65,19 +72,39 @@ public class SampleContent implements CommandLineRunner {
 
         Nomination nomination = new Nomination();
         nomination.setMovie(new ArrayList<>(movies).get(1));
-        nomination.setActor(actor1);
-        nomination = nominationRepository.save(nomination);
+		// add actor to the movie and then to nomination because of business constraints
+		new ArrayList<>(movies).get(1).getActors().add(actor1);
+		movieService.create(new ArrayList<>(movies).get(1));
+		nomination.setActor(actor1);
+        nomination = nominationService.create(nomination);
 
         Nomination nomination1 = new Nomination();
         nomination1.setMovie(new ArrayList<>(movies).get(2));
+		// add actor to the movie and then to nomination because of business constraints
+//		new ArrayList<>(movies).get(2).getActors().add(actors.getFirst());
+//		movieService.create(new ArrayList<>(movies).get(2));
         nomination1.setActor(actors.getFirst());
-        nomination1 = nominationRepository.save(nomination1);
+        nomination1 = nominationService.create(nomination1);
 
         // same movie different actor nominated
         Nomination nomination2 = new Nomination();
         nomination2.setMovie(new ArrayList<>(movies).get(2));
+		// add actor to the movie and then to nomination because of business constraints
+		new ArrayList<>(movies).get(2).getActors().add(actors.get(1));
+		movieService.create(new ArrayList<>(movies).get(2));
         nomination2.setActor(actors.get(1));
-        nomination2 = nominationRepository.save(nomination2);
+        nomination2 = nominationService.create(nomination2);
+
+		// will throw exception because we are trying to nominate an actor
+		// for a movie he didnt participate in
+		try {
+			Nomination nomination3 = new Nomination();
+			nomination3.setMovie(new ArrayList<>(movies).get(3));
+			nomination3.setActor(actors.get(1));
+			nomination3 = nominationService.create(nomination3);
+		} catch (NominationException e) {
+			log.error(e.getLocalizedMessage());
+		}
 
         AppUser appUser = new AppUser();
         appUser.setFullName("new user1");

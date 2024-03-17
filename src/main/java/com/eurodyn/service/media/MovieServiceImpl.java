@@ -31,7 +31,7 @@ public class MovieServiceImpl implements MovieService, FindCost {
 
   @Override
   public Movie read(Long modelId) {
-    return movieRepository.findById(modelId).get();
+    return movieRepository.findById(modelId).orElse(null);
   }
 
   @Override
