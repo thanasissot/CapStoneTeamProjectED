@@ -1,8 +1,9 @@
 package com.eurodyn.service.people;
 
+import com.eurodyn.model.NominationWon;
 import com.eurodyn.model.people.Actor;
-import com.eurodyn.model.people.Person;
 import com.eurodyn.repository.ActorRepository;
+import com.eurodyn.repository.NominationWonRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 @Log4j2
 public class ActorServiceImpl implements ActorService {
     private final ActorRepository actorRepository;
+	private final NominationWonRepository nominationWonRepository;
 
 
     @Override
@@ -47,4 +49,13 @@ public class ActorServiceImpl implements ActorService {
         actorRepository.delete(actor);
         return actor;
     }
+
+	@Override
+	public List<Actor> getBestActorsByYearRange(Integer fromYear, Integer toYear) {
+		List<NominationWon> nominationWonList = nominationWonRepository.findAllByYearOfReleaseBetween(fromYear, toYear);
+		return nominationWonList.stream()
+				.map(nominationWon -> nominationWon.getNomination().getActor())
+				.toList();
+	}
+
 }

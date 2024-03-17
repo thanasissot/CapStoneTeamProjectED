@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface NominationService extends GenericService<Nomination, Long> {
 
-  public List<Actor> getBestActors(Integer fromYear, Integer toYear) throws NominationException;
+  List<Actor> getBestActors(Integer fromYear, Integer toYear) throws NominationException;
 
 }

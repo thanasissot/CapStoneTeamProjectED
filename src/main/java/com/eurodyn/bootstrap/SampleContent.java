@@ -8,6 +8,7 @@ import com.eurodyn.model.people.*;
 import com.eurodyn.repository.*;
 import com.eurodyn.service.GenreService;
 import com.eurodyn.service.NominationService;
+import com.eurodyn.service.NominationWonService;
 import com.eurodyn.service.media.MovieService;
 import com.eurodyn.service.media.TvShowService;
 import com.eurodyn.service.people.ActorService;
@@ -35,10 +36,8 @@ public class SampleContent implements CommandLineRunner {
     private final ProducerService producerService;
     private final GenreService genreService;
 	private final NominationService nominationService;
+	private final NominationWonService nominationWonService;
 
-    private final NominationRepository nominationRepository;
-    private final NominationWonRepository nominationWonRepository;
-    private final PersonRepository personRepository;
     private final UserRepository userRepository;
     private final UserRatingRepository userRatingRepository;
 
@@ -81,8 +80,8 @@ public class SampleContent implements CommandLineRunner {
         Nomination nomination1 = new Nomination();
         nomination1.setMovie(new ArrayList<>(movies).get(2));
 		// add actor to the movie and then to nomination because of business constraints
-//		new ArrayList<>(movies).get(2).getActors().add(actors.getFirst());
-//		movieService.create(new ArrayList<>(movies).get(2));
+		new ArrayList<>(movies).get(2).getActors().add(actors.getFirst());
+		movieService.create(new ArrayList<>(movies).get(2));
         nomination1.setActor(actors.getFirst());
         nomination1 = nominationService.create(nomination1);
 
@@ -98,10 +97,16 @@ public class SampleContent implements CommandLineRunner {
 		// will throw exception because we are trying to nominate an actor
 		// for a movie he didnt participate in
 		try {
+//			Nomination nomination4 = new Nomination();
+//			nomination4.setMovie(new ArrayList<>(movies).get(2));
+//			nomination4.setActor(actors.get(1));
+//			nomination4 = nominationService.create(nomination4);
+
 			Nomination nomination3 = new Nomination();
 			nomination3.setMovie(new ArrayList<>(movies).get(3));
 			nomination3.setActor(actors.get(1));
 			nomination3 = nominationService.create(nomination3);
+
 		} catch (NominationException e) {
 			log.error(e.getLocalizedMessage());
 		}
@@ -119,14 +124,20 @@ public class SampleContent implements CommandLineRunner {
         NominationWon nominationWon = new NominationWon();
         nominationWon.setNomination(nomination);
         nominationWon.setGenre(nomination.getGenre());
-        nominationWon.setYearOfRelease(nomination.getNominationYear());
-        nominationWon = nominationWonRepository.save(nominationWon);
+        nominationWon.setYearOfRelease(2025);
+        nominationWon = nominationWonService.create(nominationWon);
 
         NominationWon nominationWon1 = new NominationWon();
         nominationWon1.setNomination(nomination1);
         nominationWon1.setGenre(nomination1.getGenre());
-        nominationWon1.setYearOfRelease(nomination1.getNominationYear());
-        nominationWon1 = nominationWonRepository.save(nominationWon1);
+        nominationWon1.setYearOfRelease(2024);
+        nominationWon1 = nominationWonService.create(nominationWon1);
+
+		List<NominationWon> nominationWons =
+				nominationWonService.findAllByYearOfReleaseBetween(2024, 2025);
+
+		List<Actor> bestActorsByRangeOfYears =
+				actorService.getBestActorsByYearRange(2024, 2025);
 
         // DataIntegrityViolationException thrown as expected
 //        NominationWon nominationWon2 = new NominationWon();
