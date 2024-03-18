@@ -19,7 +19,7 @@ public class Genre {
     @Enumerated(EnumType.STRING)
     GenreName name;
 
-    @OneToMany(mappedBy = "genre", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "genre")
     private Set<Movie> movies;
 
     public enum GenreName {

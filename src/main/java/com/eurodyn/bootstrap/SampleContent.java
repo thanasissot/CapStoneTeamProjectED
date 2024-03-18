@@ -1,7 +1,7 @@
 package com.eurodyn.bootstrap;
 
-import com.eurodyn.exception.NominationException;
-import com.eurodyn.model.*;
+import com.eurodyn.model.Genre;
+import com.eurodyn.model.Nomination;
 import com.eurodyn.model.media.Media;
 import com.eurodyn.model.media.Movie;
 import com.eurodyn.model.people.*;
@@ -38,8 +38,12 @@ public class SampleContent implements CommandLineRunner {
 	private final NominationService nominationService;
 	private final NominationWonService nominationWonService;
 
-	private final UserRepository userRepository;
-	private final UserRatingRepository userRatingRepository;
+    private final NominationRepository nominationRepository;
+    private final NominationWonRepository nominationWonRepository;
+    private final PersonRepository personRepository;
+    private final UserRepository userRepository;
+    private final UserRatingRepository userRatingRepository;
+	private final ActorRepository actorRepository;
 
 	public static List<Actor> getRandomActors(List<Actor> originalList) {
 		// Create a new list to store random objects
@@ -136,109 +140,109 @@ public class SampleContent implements CommandLineRunner {
 		BigDecimal a = movieService.findCost((Media) new ArrayList<>(movies).getFirst());
 		System.out.println();
 
-		Nomination nomination = new Nomination();
-		nomination.setMovie(movieToUse);
-		// add actor to the movie and then to nomination because of business constraints
-		nomination.setActor(actor1);
-		nomination = nominationService.create(nomination);
-
-		Nomination nomination2 = new Nomination();
-		nomination2.setMovie(movieToUse);
-		// add actor to the movie and then to nomination because of business constraints
-		nomination2.setActor(actor2);
-		nomination2 = nominationService.create(nomination2);
-
-		// same movie different actor nominated
-		Nomination nomination22 = new Nomination();
-		nomination22.setMovie(new ArrayList<>(movies).get(2));
-		// add actor to the movie and then to nomination because of business constraints
-		new ArrayList<>(movies).get(2).getActors().add(actors.get(1));
-		movieService.create(new ArrayList<>(movies).get(2));
-		nomination22.setActor(actors.get(1));
-		nomination22 = nominationService.create(nomination22);
-
-		// will throw exception because we are trying to nominate an actor
-		// for a movie he didnt participate in
-		try {
-//			Nomination nomination4 = new Nomination();
-//			nomination4.setMovie(new ArrayList<>(movies).get(2));
-//			nomination4.setActor(actors.get(1));
-//			nomination4 = nominationService.create(nomination4);
-
-			Nomination nomination3 = new Nomination();
-			nomination3.setMovie(new ArrayList<>(movies).get(3));
-			nomination3.setActor(actors.get(1));
-			nomination3 = nominationService.create(nomination3);
-
-		} catch (NominationException e) {
-			log.error(e.getLocalizedMessage());
-		}
-
-		AppUser appUser = new AppUser();
-		appUser.setFullName("new user1");
-		appUser = userRepository.save(appUser);
-
-		AppUser appUser2 = new AppUser();
-		appUser2.setFullName("new user2");
-		appUser2 = userRepository.save(appUser2);
-
-		AppUser appUser3 = new AppUser();
-		appUser3.setFullName("new user3");
-		appUser3 = userRepository.save(appUser3);
-
-		UserRating userRating = new UserRating();
-		userRating.setAppUser(appUser);
-		userRating.setNomination(nomination);
-		userRating.setRating(8.12f);
-		userRating = userRatingRepository.save(userRating);
-
-		UserRating userRating3 = new UserRating();
-		userRating3.setAppUser(appUser3);
-		userRating3.setNomination(nomination);
-		userRating3.setRating(8.02f);
-		userRating3 = userRatingRepository.save(userRating3);
-
-		UserRating userRating1 = new UserRating();
-		userRating1.setAppUser(appUser2);
-		userRating1.setNomination(nomination2);
-		userRating1.setRating(8.2f);
-		userRating1 = userRatingRepository.save(userRating1);
-
-		UserRating userRating2 = new UserRating();
-		userRating2.setAppUser(appUser3);
-		userRating2.setNomination(nomination2);
-		userRating2.setRating(8.1f);
-		userRating2 = userRatingRepository.save(userRating2);
-
-		NominationWon nominationWon = new NominationWon();
-		nominationWon.setNomination(nomination);
-		nominationWon.setGenre(nomination.getGenre());
-		nominationWon.setYearOfRelease(2025);
-		nominationWon = nominationWonService.create(nominationWon);
-
-		NominationWon nominationWon1 = new NominationWon();
-		nominationWon1.setNomination(nomination2);
-		nominationWon1.setGenre(nomination2.getGenre());
-		nominationWon1.setYearOfRelease(2024);
-		nominationWon1 = nominationWonService.create(nominationWon1);
-
-		List<NominationWon> nominationWons =
-				nominationWonService.findAllByYearOfReleaseBetween(2024, 2025);
-
-		List<Actor> bestActorsByRangeOfYears =
-				actorService.getBestActorsByYearRange(2024, 2025);
-
-		List<Nomination> nominationsByYear =
-				nominationService.getAllNominationsByMovieYearOfReleaseBetween(2024, 2025);
-
-		Map<Integer, Actor> bestActorsBYBestRatingPerYear = actorService.getBestActorsByYearRangeAndBestRating(2024, 2025);
-
-		// DataIntegrityViolationException thrown as expected
-//        NominationWon nominationWon2 = new NominationWon();
-//        nominationWon2.setNomination(nomination2);
-//        nominationWon2.setGenre(nomination2.getGenre());
-//        nominationWon2.setYearOfRelease(nomination2.getNominationYear());
-//        nominationWon2 = nominationWonRepository.save(nominationWon2);
+//		Nomination nomination = new Nomination();
+//		nomination.setMovie(movieToUse);
+//		// add actor to the movie and then to nomination because of business constraints
+//		nomination.setActor(actor1);
+//		nomination = nominationService.create(nomination);
+//
+//		Nomination nomination2 = new Nomination();
+//		nomination2.setMovie(movieToUse);
+//		// add actor to the movie and then to nomination because of business constraints
+//		nomination2.setActor(actor2);
+//		nomination2 = nominationService.create(nomination2);
+//
+//		// same movie different actor nominated
+//		Nomination nomination22 = new Nomination();
+//		nomination22.setMovie(new ArrayList<>(movies).get(2));
+//		// add actor to the movie and then to nomination because of business constraints
+//		new ArrayList<>(movies).get(2).getActors().add(actors.get(1));
+//		movieService.create(new ArrayList<>(movies).get(2));
+//		nomination22.setActor(actors.get(1));
+//		nomination22 = nominationService.create(nomination22);
+//
+//		// will throw exception because we are trying to nominate an actor
+//		// for a movie he didnt participate in
+//		try {
+////			Nomination nomination4 = new Nomination();
+////			nomination4.setMovie(new ArrayList<>(movies).get(2));
+////			nomination4.setActor(actors.get(1));
+////			nomination4 = nominationService.create(nomination4);
+//
+//			Nomination nomination3 = new Nomination();
+//			nomination3.setMovie(new ArrayList<>(movies).get(3));
+//			nomination3.setActor(actors.get(1));
+//			nomination3 = nominationService.create(nomination3);
+//
+//		} catch (NominationException e) {
+//			log.error(e.getLocalizedMessage());
+//		}
+//
+//		AppUser appUser = new AppUser();
+//		appUser.setFullName("new user1");
+//		appUser = userRepository.save(appUser);
+//
+//		AppUser appUser2 = new AppUser();
+//		appUser2.setFullName("new user2");
+//		appUser2 = userRepository.save(appUser2);
+//
+//		AppUser appUser3 = new AppUser();
+//		appUser3.setFullName("new user3");
+//		appUser3 = userRepository.save(appUser3);
+//
+//		UserRating userRating = new UserRating();
+//		userRating.setAppUser(appUser);
+//		userRating.setNomination(nomination);
+//		userRating.setRating(8.12f);
+//		userRating = userRatingRepository.save(userRating);
+//
+//		UserRating userRating3 = new UserRating();
+//		userRating3.setAppUser(appUser3);
+//		userRating3.setNomination(nomination);
+//		userRating3.setRating(8.02f);
+//		userRating3 = userRatingRepository.save(userRating3);
+//
+//		UserRating userRating1 = new UserRating();
+//		userRating1.setAppUser(appUser2);
+//		userRating1.setNomination(nomination2);
+//		userRating1.setRating(8.2f);
+//		userRating1 = userRatingRepository.save(userRating1);
+//
+//		UserRating userRating2 = new UserRating();
+//		userRating2.setAppUser(appUser3);
+//		userRating2.setNomination(nomination2);
+//		userRating2.setRating(8.1f);
+//		userRating2 = userRatingRepository.save(userRating2);
+//
+//		NominationWon nominationWon = new NominationWon();
+//		nominationWon.setNomination(nomination);
+//		nominationWon.setGenre(nomination.getGenre());
+//		nominationWon.setYearOfRelease(2025);
+//		nominationWon = nominationWonService.create(nominationWon);
+//
+//		NominationWon nominationWon1 = new NominationWon();
+//		nominationWon1.setNomination(nomination2);
+//		nominationWon1.setGenre(nomination2.getGenre());
+//		nominationWon1.setYearOfRelease(2024);
+//		nominationWon1 = nominationWonService.create(nominationWon1);
+//
+//		List<NominationWon> nominationWons =
+//				nominationWonService.findAllByYearOfReleaseBetween(2024, 2025);
+//
+//		List<Actor> bestActorsByRangeOfYears =
+//				actorService.getBestActorsByYearRange(2024, 2025);
+//
+//		List<Nomination> nominationsByYear =
+//				nominationService.getAllNominationsByMovieYearOfReleaseBetween(2024, 2025);
+//
+//		Map<Integer, Actor> bestActorsBYBestRatingPerYear = actorService.getBestActorsByYearRangeAndBestRating(2024, 2025);
+//
+//		// DataIntegrityViolationException thrown as expected
+////        NominationWon nominationWon2 = new NominationWon();
+////        nominationWon2.setNomination(nomination2);
+////        nominationWon2.setGenre(nomination2.getGenre());
+////        nominationWon2.setYearOfRelease(nomination2.getNominationYear());
+////        nominationWon2 = nominationWonRepository.save(nominationWon2);
 
 		List<Actor> actorList = actorRepository.findAll();
 		List<Actor> actorList1 = (List<Actor>) actorService.read();

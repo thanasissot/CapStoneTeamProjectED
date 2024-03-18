@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ActorRepository extends JpaRepository<Actor, Long> {
-	@Query("SELECT a FROM Actor a JOIN FETCH a.nominations WHERE a.id = :actorId")
-	Actor findByIdWithNominations(@Param("actorId") Long actorId);
+//	@Query("SELECT a FROM Actor a JOIN FETCH a.nominations WHERE a.id = :actorId")
+//	Actor findByIdWithNominations(@Param("actorId") Long actorId);
 }

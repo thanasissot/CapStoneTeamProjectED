@@ -13,5 +13,5 @@ public interface MovieService extends GenericService<Movie, Long> {
   BigDecimal findCost(Media media);
   List<Movie> getMoviesWithCertainNominations(Integer nominatedActors) throws MediaException;
 
-	List<MovieDto> readMoviesDto();
+//	List<MovieDto> readMoviesDto();
 }

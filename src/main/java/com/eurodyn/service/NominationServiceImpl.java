@@ -1,13 +1,9 @@
 package com.eurodyn.service;
 
-import com.eurodyn.dto.NominationDto;
 import com.eurodyn.exception.NominationException;
-import com.eurodyn.mapper.NominationMapper;
 import com.eurodyn.model.Nomination;
-import com.eurodyn.model.UserRating;
 import com.eurodyn.model.media.Movie;
 import com.eurodyn.repository.NominationRepository;
-import com.eurodyn.repository.UserRatingRepository;
 import com.eurodyn.service.media.MovieService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,8 +17,8 @@ public class NominationServiceImpl implements NominationService {
 
 	private final NominationRepository nominationRepository;
 	private final MovieService movieService;
-	private final UserRatingRepository userRatingRepository;
-	private final NominationMapper nominationMapper;
+//	private final UserRatingRepository userRatingRepository;
+//	private final NominationMapper nominationMapper;
 
 	// create and update should verify that
 	// actor nominated is an actor that played in the movie
@@ -71,19 +67,22 @@ public class NominationServiceImpl implements NominationService {
 		return nomination;
 	}
 
-	@Override
-	public List<Nomination> getAllNominationsByMovieYearOfReleaseBetween(Integer fromYear, Integer toYear) throws NominationException {
-		List<Nomination> byYearRange = nominationRepository.findAllByYear(fromYear, toYear);
-		byYearRange.forEach(nomination -> {
-			List<UserRating> userRatings = userRatingRepository.findAllByNominationId(nomination.getId());
-			nomination.setUserRatings(userRatings);
-		});
-		return byYearRange;
-	}
+//	@Override
+//	public List<Nomination> getAllNominationsByMovieYearOfReleaseBetween(Integer fromYear, Integer toYear) throws NominationException {
+////		List<Nomination> byYearRange = nominationRepository.findAllByYear(fromYear, toYear);
+////		byYearRange.forEach(nomination -> {
+////			List<UserRating> userRatings = userRatingRepository.findAllByNominationId(nomination.getId());
+////			nomination.setUserRatings(userRatings);
+////		});
+////		return byYearRange;
+//		return null;
+//	}
 
-	public List<NominationDto> readNominationsDto() {
-		List<Nomination> nominations = nominationRepository.findAll();
-		return nominations.stream().map(nominationMapper::entityToDto).toList();
-	}
+//	public List<NominationDto> readNominationsDto() {
+////		List<Nomination> nominations = nominationRepository.findAll();
+////		return nominations.stream().map(nominationMapper::entityToDto).toList();
+//		return null;
+//
+//	}
 
 }

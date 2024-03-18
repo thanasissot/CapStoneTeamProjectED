@@ -7,7 +7,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -34,7 +35,7 @@ public class Nomination {
   private Integer nominationYear;
 
   @OneToMany(mappedBy = "nomination", cascade = CascadeType.ALL)
-  private List<UserRating> userRatings;
+  private Set<UserRating> userRatings = new HashSet<>();
 
 //  @Transient
 //  private NominationType nominationResult;

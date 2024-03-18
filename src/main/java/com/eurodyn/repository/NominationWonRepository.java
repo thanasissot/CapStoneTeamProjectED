@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 
 public interface NominationWonRepository extends JpaRepository<NominationWon, Long> {
-	List<NominationWon> findAllByYearOfReleaseBetween(Integer year1, Integer year2);
+//	List<NominationWon> findAllByYearOfReleaseBetween(Integer year1, Integer year2);
 }
