@@ -1,14 +1,12 @@
 package com.eurodyn.model;
 
-import com.eurodyn.exception.NominationException;
 import com.eurodyn.model.media.Movie;
 import com.eurodyn.model.people.Actor;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -35,7 +33,7 @@ public class Nomination {
   private Integer nominationYear;
 
   @OneToMany(mappedBy = "nomination", cascade = CascadeType.ALL)
-  private Set<UserRating> userRatings = new HashSet<>();
+  private List<UserRating> userRatings;
 
 //  @Transient
 //  private NominationType nominationResult;
@@ -44,31 +42,5 @@ public class Nomination {
 //    NOMINATED,
 //    WON
 //  }
-
-  @PostLoad
-  public void setTransientFields() {
-    if (movie != null) {
-      genre = movie.getGenre();
-      nominationYear = movie.getYearOfRelease();
-    }
-
-    throw new NominationException("error occurred while trying to access Movie field for Nomination, err=No movie exists for this Nomination.");
-  }
-
-  public Genre getGenre() {
-    if (movie != null) {
-      return movie.getGenre();
-    }
-
-    throw new NominationException("error occurred while trying to get Genre for Nomination, err=No movie exists for this Nomination.");
-  }
-
-  public Integer getNominationYear() {
-    if (movie != null) {
-      return movie.getYearOfRelease();
-    }
-
-    throw new NominationException("error occurred while trying to get Year for Nomination, err=No movie exists for this Nomination.");
-  }
 
 }

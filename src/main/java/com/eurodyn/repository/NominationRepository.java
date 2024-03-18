@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface NominationRepository extends JpaRepository<Nomination, Long> {
 
-//	@Query("SELECT n FROM Nomination n JOIN n.movie m WHERE m.yearOfRelease BETWEEN :yearFrom AND :yearTo")
-//	List<Nomination> findAllByYear(Integer yearFrom, Integer yearTo);
+	@Query("SELECT n FROM Nomination n JOIN n.movie m WHERE m.yearOfRelease BETWEEN :yearFrom AND :yearTo")
+	List<Nomination> findAllByYear(Integer yearFrom, Integer yearTo);
 
 //
 //    List<Nomination> findAllByNominationResult(Nomination.NominationType nominationType);

@@ -48,7 +48,6 @@ public class NominationWonServiceImpl implements NominationWonService {
 
 	@Override
 	public List<NominationWon> findAllByYearOfReleaseBetween(Integer fromYear, Integer toYear) {
-//		return nominationWonRepository.findAllByYearOfReleaseBetween(fromYear, toYear);
-		return null;
+		return nominationWonRepository.findAllByYearOfReleaseBetween(fromYear, toYear);
 	}
 }

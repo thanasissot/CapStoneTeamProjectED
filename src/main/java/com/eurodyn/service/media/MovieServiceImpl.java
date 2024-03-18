@@ -80,11 +80,11 @@ public class MovieServiceImpl implements MovieService, FindCost {
     return nominatedMovies;
   }
 
-//	@Override
-//	public List<MovieDto> readMoviesDto() {
-//	  	List<Movie> movieList = movieRepository.findAll();
-//		return movieList.stream().map(movieMapper::entityToDto).toList();
-//	}
+	@Override
+	public List<MovieDto> readMoviesDto() {
+	  	List<Movie> movieList = movieRepository.findAll();
+		return movieList.stream().map(movieMapper::entityToDto).toList();
+	}
 
 
 	@Override
