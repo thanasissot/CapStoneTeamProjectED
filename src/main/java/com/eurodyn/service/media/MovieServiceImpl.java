@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class MovieServiceImpl implements MovieService, FindCost {
 
   private final MovieRepository movieRepository;
+  private final MovieMapper movieMapper;
 
   @Override
   public Movie create(Movie model) {
@@ -77,8 +78,14 @@ public class MovieServiceImpl implements MovieService, FindCost {
     return nominatedMovies;
   }
 
+	@Override
+	public List<MovieDto> readMoviesDto() {
+	  	List<Movie> movieList = movieRepository.findAll();
+		return movieList.stream().map(movieMapper::entityToDto).toList();
+	}
 
-  @Override
+
+	@Override
   public BigDecimal findCost(Media media) {
     return FindCost.super.findCost(media);
   }

@@ -20,6 +20,7 @@ public class NominationServiceImpl implements NominationService {
 	private final NominationRepository nominationRepository;
 	private final MovieService movieService;
 	private final UserRatingRepository userRatingRepository;
+	private final NominationMapper nominationMapper;
 
 	// create and update should verify that
 	// actor nominated is an actor that played in the movie
@@ -76,6 +77,11 @@ public class NominationServiceImpl implements NominationService {
 			nomination.setUserRatings(userRatings);
 		});
 		return byYearRange;
+	}
+
+	public List<NominationDto> readNominationsDto() {
+		List<Nomination> nominations = nominationRepository.findAll();
+		return nominations.stream().map(nominationMapper::entityToDto).toList();
 	}
 
 }

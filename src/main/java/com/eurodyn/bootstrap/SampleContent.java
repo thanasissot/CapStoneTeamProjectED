@@ -240,6 +240,9 @@ public class SampleContent implements CommandLineRunner {
 //        nominationWon2.setYearOfRelease(nomination2.getNominationYear());
 //        nominationWon2 = nominationWonRepository.save(nominationWon2);
 
+		List<Actor> actorList = actorRepository.findAll();
+		List<Actor> actorList1 = (List<Actor>) actorService.read();
+		List<Nomination> nominationList = (List<Nomination>) nominationService.read();
 		System.out.println();
 
 	}
