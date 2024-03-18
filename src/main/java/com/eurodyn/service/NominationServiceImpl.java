@@ -1,6 +1,8 @@
 package com.eurodyn.service;
 
+import com.eurodyn.dto.NominationDto;
 import com.eurodyn.exception.NominationException;
+import com.eurodyn.mapper.NominationMapper;
 import com.eurodyn.model.Nomination;
 import com.eurodyn.model.UserRating;
 import com.eurodyn.model.media.Movie;

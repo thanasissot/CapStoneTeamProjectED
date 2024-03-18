@@ -1,6 +1,8 @@
 package com.eurodyn.service.media;
 
+import com.eurodyn.dto.media.MovieDto;
 import com.eurodyn.exception.MediaException;
+import com.eurodyn.mapper.MovieMapper;
 import com.eurodyn.model.media.Media;
 import com.eurodyn.model.media.Movie;
 import com.eurodyn.repository.MovieRepository;
